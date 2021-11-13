@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+     <meta charset="UTF-8">
+    <title>Home</title>
+    <style>
+    body {background-color:#A6DAF7}
+    #theme {background-color:#FF5733}
+    h1{
+    text-align: center;
+    }
+    h3{
+    text-align: center;
+    }
+    a{
+    text-align: center;
+    }
+
+       #package{
+       background-color: #DAF7A6;
+        float: left;
+        width: 308px;
+        padding: 10px 10px 10px 10px;
+        margin: auto;
+        border: 2px solid #000404;
+        }
+         #tour{
+         background-color: #FFC300;
+        float: left;
+        width: 308px;
+        padding: 10px 10px 10px 10px;
+        margin: auto;
+        border: 2px solid #000404;
+        }
+
+
+    </style>
+
+</head>
+<body>
+<form action="{%url 'search'%}" method="POST">
+    {%csrf_token%}
+    <input type="radio" name="ftype" value="round" checked>
+    <label for="ftype">Round</label>
+    <input type="radio" name="ftype" value="one_way">
+    <label for="ftype">One Way</label>
+    <br>
+    <label for="departing">Departing:</label>
+    <input type="date" name="departing">
+
+    <label for="arriving">Arriving:</label>
+    <input type="date" name="arriving">
+
+    <label for="origin">Origin:</label>
+    <select name="origin" >
+        {%for airport in airports%}
+        <option>{{airport.city}} </option>
+        {%endfor%}
+    </select>
+    <label for="destination">Destination:</label>
+    <select name="destination" >
+        {%for airport in airports%}
+
+        <option>{{airport.city}} </option>
+        {%endfor%}
+ </select>
+    <label for="adult_sit">Adult Sit</label>
+    <select name="adult_sit">
+        {%for number in range%}
+        <option>{{number}}</option>
+        {%endfor%}
+        </select>
+    <label for="child_sit">Child Sit</label>
+    <select name="child_sit">
+        {%for number in range%}
+        <option>{{number}}</option>
+        {%endfor%}
+        </select><br>
+    <button type="submit">Search</button>
+
+</form>
+
+<div id="theme">
+<h3>Airline</h3>
+{% if user.is_authenticated %}
+    <p>Welcome, {{ user.first_name }}. Thanks for logging in. </p>
+    <a href="{% url 'logout' %}">Log Out</a>
+{% else %}
+    <p>Welcome,</p>
+    <p> Please <a href="{% url 'logout'%}" >Login</a> </p>
+{% endif %}
+
+</div>
+<div>
+<h1>Flight Package</h1>
+    {% for package in fpackage %}
+    <div id="package" >
+<h3>${{package.price}}</h3>
+<h3>{{package.departure}}</h3>
+<h3>To</h3>
+<h3>{{package.arrival}}</h3>
+<p style="text-align:center;">{{package.description}}</p>
+        <div style="text-align:center">
+<a href="{% url 'flight' package.id %}">Pre-booking</a>
+        </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+<div>
+    <h1>Tour Package</h1>
+    {% for tour in tpackage %}
+    <div id="tour" >
+    <h3>{{tour.place}}</h3>
+    <p style="text-align:center;">{{tour.hotel}}, {{tour.duration}}</p>
+        <p style="text-align:center;">${{tour.price}}</p>
+        <div style="text-align:center">
+    <a href="{% url 'tour' tour.id %}" class="price-btn"> Book Now</a>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+</body>
+</html>

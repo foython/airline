@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+    <style>
+    #type{
+
+        text-align: center;
+        background-color: #DAF7A6;
+        float: left;
+        width: 230px;
+        padding: 10px 10px 10px 10px;
+        margin: auto;
+
+        }
+     #flight{
+        background-color: #DAF7A6;
+        float: left;
+        width: 530px;
+        padding: 10px 10px 10px 10px;
+        margin: auto;
+
+        }
+
+</style>
+
+</head>
+<body>
+
+
+<h1 id="flight">Flight</h1> <h1 id="type">Saver</h1>  <h1 id="type">Economy</h1>   <h1 id="type">Business</h1>
+<br>
+<br>
+<br>
+<br>
+<div>
+<form action="{%url 'rbook'%}" method="POST">
+    {%csrf_token%}
+<h2>DEPARTURE</h2>
+     {% for d in dflight %}
+     <h4 id="flight"><input type="radio" name="dflight" value="{{d.flight.id}}" checked>
+     <label for="dflight">Flight {{d.flight}}</label></h4>
+       <h4 id="type"> <input type="radio" name="price" value="{{d.saver}}" checked>
+    <label for="price">{{d.saver}}</label></h4>
+
+    <h4 id="type"><input type="radio" name="price" value="{{d.economy}}">
+    <label for="price">{{d.economy}}</label></h4>
+
+    <h4 id="type"><input type="radio" name="price" value="{{d.business}}">
+         <label for="price">{{d.business}}</label>
+    </h4>
+    {% empty %}
+    <h3>No flight found. please try another destination</h3>
+{%endfor%}
+</div>
+
+{%if round_trip%}
+    <br>
+    <br>
+
+<h2>RETURN</h2>
+    {% for r in aflight %}
+
+
+     <h4 id="flight"><input type="radio" name="rflight" value="{{r.flight.id}}" checked>
+     <label for="rflight">Flight {{r.flight}}</label></h4>
+       <h4 id="type"><input type="radio" name="rprice" value="{{r.saver}}" checked>
+    <label for="rprice">{{r.saver}}</label></h4>
+    <h4 id="type"><input type="radio" name="rprice" value="{{r.economy}}">
+    <label for="rprice">{{r.economy}}</label></h4>
+    <h4 id="type"><input type="radio" name="rprice" value="{{r.business}}">
+         <label for="rprice">{{r.business}}</label></h4>
+     {% empty %}
+    <h3>No flight found. please try another destination</h3>
+    {%endfor%}
+     {%endif%}
+
+    <input type="submit">
+
+
+</form>
+
+</body>
+</html>

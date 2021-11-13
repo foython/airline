@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tour booking</title>
+</head>
+<body>
+<form action="" method="post">
+    {%csrf_token%}
+    <label for="journey_date">Select Journey Date:</label>
+    <input type="date" name="journey_date">
+    <br>
+    <br>
+    <label for="place">Tour Place:</label>
+    <input type="text" name="place" value="{{booked_tour.place}}">
+    <br>
+    <br>
+    <label for="hotel">Hotel:</label>
+    <input type="text" name="hotel" value="{{booked_tour.hotel}}">
+    <br>
+    <br>
+    <label for="duration">Duration:</label>
+    <input type="text" name="duration" value="{{booked_tour.duration}}">
+    <br>
+    <br>
+    <label for="price">Price:</label>
+    <input type="text" name="price" value="{{booked_tour.price}}">
+    <br>
+    <br>
+    <input type="submit" >
+
+</form>
+
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flight {{flights.id}}</title>
+</head>
+<body>
+<h1>Flight {{flights.id}}</h1>
+<ul>
+    <li>Time: {{flights.dtime}}</li>
+    <li>Origin: {{flights.origin}}</li>
+    <li>Destination: {{flights.destination}}</li>
+</ul>
+
+<h2>Passengers</h2>
+<ul>
+    {% for passenger in passengers %}
+    <li>{{passenger}}</li>
+    {% empty %}
+    <li>No Passengers.</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'flights_list'%}">Back to Flight List</a>
+{% for days in all_date %}
+<p>{{days}}</p>
+{% for pack in tour_pack %}
+<p>{{pack.place}}</p>
+<p>{{pack.hotel}}</p>
+<p>{{pack.duration}}</p>
+<p>{{pack.price}}</p>
+{%endfor%}
+{%endfor%}
+</body>
+</html>

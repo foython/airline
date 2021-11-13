@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin page</title>
+</head>
+<body>
+<h3>Airline</h3>
+{% if user.is_authenticated %}
+    <p>Welcome, {{ user.first_name }}. Thanks for logging in. </p>
+    <a href="{% url 'logout' %}">Log Out</a>
+{% else %}
+    <p>Welcome,</p>
+    <p> Please <a href="{% url 'logout'%}" >Login</a> </p>
+{% endif %}
+<h1>Booked Flight</h1>
+{%for booking in booked%}
+{{booking}}<br>
+{%endfor%}
+</body>
+</html>

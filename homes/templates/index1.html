@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Package Flight</title>
+</head>
+<body>
+<h3> Flights </h3>
+<ul>
+{%for flight in myflight%}
+
+    {%if fpack.departure == flight.origin and fpack.arrival == flight.destination%}
+
+        <li>
+            {{flight.date}} {{flight.origin}} to {{flight.destination}}<a href="{%url 'book' flight.id %}"> Book Now</a>
+        </li>
+
+
+    {%endif%}
+
+{%endfor%}
+</ul>
+</body>
+</html>
