@@ -1,4 +1,6 @@
-from django.shortcuts import render, HttpResponseRedirect
+from django.contrib import messages
+
+from django.shortcuts import render, HttpResponseRedirect, redirect
 from .models import AddFlight, Booked, Price
 from django.urls import reverse
 from django.http import FileResponse
@@ -8,6 +10,7 @@ from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
 from datetime import date, timedelta
 from homes.models import TourPackage
+from django.db.models import Sum
 
 
 def all_flight(request):
@@ -41,6 +44,10 @@ def search(request):
         if trip_type == 'round':
             round_trip = True
             arrive_date = request.POST.get('arriving')
+            # if arrive_date is None:
+            # messages.info(request, 'Username Password not matched')
+            # return redirect(request.path)
+
         depart_date = request.POST.get('departing')
         origin = request.POST.get('origin')
         destination = request.POST.get('destination')
@@ -56,7 +63,16 @@ def search(request):
                                        flight__destination__city=destination)
         aflight = Price.objects.filter(flight__date=arrive_date, flight__origin__city=destination,
                                        flight__destination__city=origin)
-        return render(request, 'search.html', {'dflight': dflight, 'aflight': aflight, 'round_trip': round_trip})
+        booked_sit = Booked.objects.values('flight', 'sit_type').order_by('sit_type').annotate(
+            Total=Sum('no_of_adult_sit') + Sum('no_of_child_sit'))
+        sit = booked_sit.filter(flight=18, sit_type='saver')
+
+        return render(request, 'search.html', {'dflight': dflight,
+                                               'aflight': aflight,
+                                               'round_trip': round_trip,
+
+                                               'sit': sit,
+                                               })
 
 
 def returnbook(request):
@@ -78,7 +94,7 @@ def returnbook(request):
         total_return = return_price * adult_sit + return_child_sit_price
         total = total_depart + total_return
         depart_sit_class = Price.objects.get(flight__id=depart_flight.id)
-
+        '''making sit type'''
         depart_sit_type = None
 
         if depart_sit_class.saver == depart_price:
@@ -105,6 +121,18 @@ def returnbook(request):
             return depart_flight, return_flight, total_depart, total_return, depart_sit_type, return_sit_type, \
                    return_flight
 
+        '''checking do flight have enough free sit'''
+        booked_sits = Booked.objects.filter(flight__id=depart_flight.id, sit_type=depart_sit_type).aggregate(total=Sum(
+            'no_of_adult_sit') + Sum('no_of_child_sit'))
+        b = booked_sits['total']
+        if b >= 50:
+            messages.info(request, 'All sit booked selected depart class')
+        if return_flight is not False:
+            rbooked_sits = Booked.objects.filter(flight__id=return_flight.id, sit_type=return_sit_type).aggregate(
+                total=Sum('no_of_adult_sit') + Sum('no_of_child_sit'))
+            c = rbooked_sits['total']
+            if c >= 50:
+                messages.info(request, 'All sit booked selected return class')
         return render(request, 'book.html', {'depart_flight': depart_flight,
                                              'depart_price': depart_price,
                                              'return_flight': return_flight,
@@ -117,8 +145,8 @@ def returnbook(request):
                                              'depart_child_sit_price': depart_child_sit_price,
                                              'return_child_sit_price': return_child_sit_price,
                                              'depart_sit_type': depart_sit_type,
-                                             'return_sit_type': return_sit_type
-                                             })
+                                             'return_sit_type': return_sit_type,
+                                             'b': b})
 
 
 def con_booked(request):
@@ -141,8 +169,8 @@ def con_booked(request):
                              flight=return_flight, no_of_adult_sit=adult_sit, no_of_child_sit=child_sit,
                              sit_type=return_sit_type, total_amount=total_return, return_flight=return_type)
             rbooked.save()
-        #else:
-            #return HttpResponseRedirect(reverse('confirm'))
+        # else:
+        # return HttpResponseRedirect(reverse('confirm'))
         global confirms
 
         def confirms():
@@ -154,7 +182,6 @@ def con_booked(request):
 def confirm(request):
     booked, rbooked = confirms()
     return render(request, 'confirm.html', {'booked': booked, 'rbooked': rbooked})
-
 
 
 def print(request):
@@ -183,4 +210,3 @@ def print(request):
     buffer.seek(0)
 
     return FileResponse(buffer, as_attachment=True, filename='Doc.pdf')
-

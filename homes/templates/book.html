@@ -8,6 +8,11 @@
     </style>
 </head>
 <body>
+{%if messages%}
+    {% for message in messages %}
+    <h3> {{message}}</h3>
+    {% endfor %}
+{% else %}
 <h1 style="color:Violet;">Please check details and confirm to book your flight.</h1>
 <h2>Departure </h2>
 <h3 style="color:MediumSeaGreen;">Flight {{depart_flight}} @ {{depart_price}} for {{adult_sit}} adult & {{child_sit}} child total TK{{total_depart}}</h3>
@@ -34,13 +39,13 @@
     <br>
 
     <input type="submit">
-
-
 </form>
+{%endif%}
 <p>{{request.user.first_name}}</p>
 <p>{{request.path}}</p>
 {{depart_flight.id}}
 {{depart_sit_type}}
 {{return_sit_type}}
+<p>{{b}}</p>
 </body>
 </html>
