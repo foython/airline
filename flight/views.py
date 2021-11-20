@@ -94,7 +94,7 @@ def returnbook(request):
         total_return = return_price * adult_sit + return_child_sit_price
         total = total_depart + total_return
         depart_sit_class = Price.objects.get(flight__id=depart_flight.id)
-        '''making sit type'''
+        '''sit type determination'''
         depart_sit_type = None
 
         if depart_sit_class.saver == depart_price:
