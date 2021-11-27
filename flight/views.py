@@ -114,25 +114,26 @@ def returnbook(request):
                 return_sit_type = 'economy'
             else:
                 return_sit_type = 'business'
-
-            global others
+        '''create some global variable for use other function'''
+        global others
 
         def others():
             return depart_flight, return_flight, total_depart, total_return, depart_sit_type, return_sit_type, \
                    return_flight
 
-        '''checking do flight have enough free sit'''
+        '''checking flight have enough free sit or not'''
         booked_sits = Booked.objects.filter(flight__id=depart_flight.id, sit_type=depart_sit_type).aggregate(total=Sum(
             'no_of_adult_sit') + Sum('no_of_child_sit'))
         b = booked_sits['total']
-        if b >= 50:
-            messages.info(request, 'All sit booked selected depart class')
-        if return_flight is not False:
-            rbooked_sits = Booked.objects.filter(flight__id=return_flight.id, sit_type=return_sit_type).aggregate(
-                total=Sum('no_of_adult_sit') + Sum('no_of_child_sit'))
-            c = rbooked_sits['total']
-            if c >= 50:
-                messages.info(request, 'All sit booked selected return class')
+        if b is not None:
+            if b >= 50:
+                messages.info(request, 'All sit booked selected depart class')
+            if return_flight is not False:
+                rbooked_sits = Booked.objects.filter(flight__id=return_flight.id, sit_type=return_sit_type).aggregate(
+                    total=Sum('no_of_adult_sit') + Sum('no_of_child_sit'))
+                c = rbooked_sits['total']
+                if c >= 50:
+                    messages.info(request, 'All sit booked selected return class')
         return render(request, 'book.html', {'depart_flight': depart_flight,
                                              'depart_price': depart_price,
                                              'return_flight': return_flight,

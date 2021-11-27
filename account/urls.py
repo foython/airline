@@ -5,6 +5,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path('', views.info, name='info'),
     path('login/', views.user_login, name='login'),
     path('register/', views.user_reg, name='reg'),
     path('logout/', views.user_logout, name='logout'),

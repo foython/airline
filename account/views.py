@@ -50,3 +50,7 @@ def user_logout(request):
 def admin(request):
     booked = Booked.objects.all()
     return render(request, 'admin.html', {'booked': booked})
+
+
+def info(request):
+    return render(request, 'info.html')

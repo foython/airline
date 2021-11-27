@@ -21,14 +21,6 @@
     {% endfor %}
 </ul>
 <a href="{% url 'flights_list'%}">Back to Flight List</a>
-{% for days in all_date %}
-<p>{{days}}</p>
-{% for pack in tour_pack %}
-<p>{{pack.place}}</p>
-<p>{{pack.hotel}}</p>
-<p>{{pack.duration}}</p>
-<p>{{pack.price}}</p>
-{%endfor%}
-{%endfor%}
+
 </body>
 </html>

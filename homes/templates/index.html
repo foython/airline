@@ -2,48 +2,64 @@
 <html>
 <head>
      <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Home</title>
     <style>
-    body {background-color:#A6DAF7}
-    #theme {background-color:#FF5733}
-    h1{
+  body {
+    background-color:#F5FFFA;
+    }
+  #theme {
+    background-color:#00BFFF;
     text-align: center;
     }
-    h3{
+  h1 {
+    color:#063B22;
     text-align: center;
     }
-    a{
+  h2 {
+    color:#C70039;
+    text-align: center;
+    }
+  h3 {
+    text-align: center;
+    }
+    h4 {
+    text-align: center;
+    }
+  a {
     text-align: center;
     }
 
-       #package{
-       background-color: #DAF7A6;
-        float: left;
-        width: 308px;
-        padding: 10px 10px 10px 10px;
-        margin: auto;
-        border: 2px solid #000404;
-        }
-         #tour{
-         background-color: #FFC300;
-        float: left;
-        width: 308px;
-        padding: 10px 10px 10px 10px;
-        margin: auto;
-        border: 2px solid #000404;
-        }
+  #package {
+    display: inline-block;
+    background-color: #40E0D0;
+    padding: 10px 10px 10px 10px;
+    border: 1px solid #000404;
+    width: 196px;
+
+    }
+
+  #tour {
+    display: inline-block;
+    box-sizing: border-box;
+    background-color:#34A56F;
+    padding: 10px 10px 10px 10px;
+    border: 1px solid #000404;
+    }
 
 
     </style>
 
 </head>
 <body>
+
 <form action="{%url 'search'%}" method="POST">
     {%csrf_token%}
     <input type="radio" name="ftype" value="round" checked>
     <label for="ftype">Round</label>
     <input type="radio" name="ftype" value="one_way">
     <label for="ftype">One Way</label>
+    <br>
     <br>
     <label for="departing">Departing:</label>
     <input type="date" name="departing">
@@ -52,7 +68,7 @@
     <input type="date" name="arriving">
 
     <label for="origin">Origin:</label>
-    <select name="origin" >
+    <select name="origin">
         {%for airport in airports%}
         <option>{{airport.city}} </option>
         {%endfor%}
@@ -75,49 +91,52 @@
         {%for number in range%}
         <option>{{number}}</option>
         {%endfor%}
-        </select><br>
+        </select>
+    <br>
+    <br>
     <button type="submit">Search</button>
 
 </form>
 
 
 <div id="theme">
-<h3>Airline</h3>
+<h3 style="color:#A70D2A;">Airline</h3>
 {% if user.is_authenticated %}
-    <p>Welcome, {{ user.first_name }}. Thanks for logging in. </p>
+    <p style="text-align:center;">Welcome <b>{{ user.first_name }}</b></p>
     <a href="{% url 'logout' %}">Log Out</a>
 {% else %}
-    <p>Welcome,</p>
-    <p> Please <a href="{% url 'logout'%}" >Login</a> </p>
+    <p>Welcome</p>
+    <p> Please <a href="{% url 'logout'%}" >Log in</a> </p>
 {% endif %}
-
+<br>
 </div>
-<div>
-<h1>Flight Package</h1>
+
+<div style="text-align:center;">
     {% for package in fpackage %}
     <div id="package" >
-<h3>${{package.price}}</h3>
-<h3>{{package.departure}}</h3>
-<h3>To</h3>
-<h3>{{package.arrival}}</h3>
-<p style="text-align:center;">{{package.description}}</p>
+        <h2>${{package.price}}</h2>
+        <h3>{{package.departure}}</h3>
+        <h4>To</h4>
+        <h3>{{package.arrival}}</h3>
+        <p style="text-align:center;">{{package.description}}</p>
         <div style="text-align:center">
-<a href="{% url 'flight' package.id %}">Pre-booking</a>
+            <a href="{% url 'flight' package.id %}">Pre-booking</a>
         </div>
-        </div>
+    </div>
     {% endfor %}
+
 </div>
 
 
-<div>
+<div style="text-align:center;">
     <h1>Tour Package</h1>
     {% for tour in tpackage %}
     <div id="tour" >
-    <h3>{{tour.place}}</h3>
-    <p style="text-align:center;">{{tour.hotel}}, {{tour.duration}}</p>
+        <h3>{{tour.place}}</h3>
+        <p style="text-align:center;">{{tour.hotel}}, {{tour.duration}}</p>
         <p style="text-align:center;">${{tour.price}}</p>
         <div style="text-align:center">
-    <a href="{% url 'tour' tour.id %}" class="price-btn"> Book Now</a>
+            <a href="{% url 'tour' tour.id %}" class="price-btn"> Book Now</a>
         </div>
     </div>
     {% endfor %}

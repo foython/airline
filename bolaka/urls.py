@@ -21,4 +21,5 @@ urlpatterns = [
     path('accounts/', include('account.urls')),
     path('flight/', include('flight.urls')),
     path('home/', include('homes.urls')),
+    path('', include('account.urls')),
     ]

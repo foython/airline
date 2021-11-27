@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 def index(request):
     return render(request, 'index.html', {'fpackage': FlightPackage.objects.all(),
                                           'tpackage': TourPackage.objects.all(),
-                                          'airports': Airport.objects.all(),
+                                          'airports': Airport.objects.all().order_by('city'),
                                           'range': range(11)
                                           })
 
